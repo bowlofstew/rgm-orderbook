@@ -1,7 +1,7 @@
 #ifndef __CONSTANTS_HPP__
 #define __CONSTANTS_HPP__
 
-namespace JumpInterview {
+namespace RgmInterview {
 	namespace OrderBook {
 		namespace Constants	{
 			// Every price is multiplied by 1000 and then treated as a uint32_t.

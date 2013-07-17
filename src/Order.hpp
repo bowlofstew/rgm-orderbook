@@ -9,7 +9,7 @@
 
 #include "PoolAllocator.hpp"
 
-namespace JumpInterview {
+namespace RgmInterview {
 	namespace OrderBook {
 
 		namespace OrderSide
@@ -28,13 +28,12 @@ namespace JumpInterview {
 		{
 		public:
 			friend class OrderList;
-			Order ( uint32_t order_id,
-					OrderSide::Side side,
-					uint32_t volume,
-					uint32_t price );
+			Order (
+				OrderSide::Side side,
+				uint32_t volume,
+				uint32_t price );
 
 			friend class OrderBook;
-			uint32_t orderId() const;
 			OrderSide::Side side() const;
 			uint32_t volume() const;
 			uint32_t price() const;
@@ -49,20 +48,13 @@ namespace JumpInterview {
 				PoolAllocator<Order>::instance().deallocate ( static_cast< Order * > ( p ), sizeof ( Order ) ) ;
 			}
 
-			void print ( std::ostream& os );
+			void reduce ( uint32_t volume );
 		private:
 			Order ( Order const & rhs ) {}
-			uint32_t m_order_id;
 			OrderSide::Side m_side;
 			uint32_t m_volume;
 			uint32_t m_price;
-			char m_formatted_string[ 40 ];
-
-			void modify ( uint32_t volume, uint32_t price );
-			inline char * format();
 		};
-
-		std::ostream& operator<< ( std::ostream& os, Order& order );
 	}
 }
 
