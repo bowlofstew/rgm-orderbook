@@ -11,7 +11,9 @@ namespace RgmInterview {
 		OrderBook::OrderBook ( ErrorSummary & error_summary,
 							   uint32_t target_size ) :
 			m_error_summary ( error_summary ),
-			m_target_size ( target_size )
+			m_target_size ( target_size ),
+			m_buys ( target_size ),
+			m_sells ( target_size )
 		{
 			m_add_functors[ OrderSide::BUY ] = std::bind ( &OrderBook::add<BuyPriceLevelMap>, this, std::ref ( m_buys ), std::placeholders::_1 );
 			m_add_functors[ OrderSide::SELL ] = std::bind ( &OrderBook::add<SellPriceLevelMap>, this, std::ref ( m_sells ), std::placeholders::_1 );
@@ -106,7 +108,7 @@ namespace RgmInterview {
 								std::string const & time,
 								std::ostream &os )
 		{
-			uint32_t new_value ( map.get_total_value ( m_target_size ) );
+			uint32_t new_value ( map.get_total_value ( ) );
 			if ( m_last_values [ side ] != new_value )
 			{
 				m_last_values [ side ] = new_value;

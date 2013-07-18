@@ -178,14 +178,16 @@ namespace RgmInterview {
 		bool FeedHandler::isUIntOverflow ( const char * input, size_t len )
 		{
 			static const char * max_size ( "4294967295" );
-			if ( len > 10 )
-				return true;
-			for ( size_t i = 0; i < len && input[i] >= max_size[i] ; i++ )
+			if ( len <= 10 )
 			{
-				if ( input[i] > max_size[i] )
-					return true;
+				for ( size_t i = 0; i < len && input[i] >= max_size[i] ; i++ )
+				{
+					if ( input[i] > max_size[i] )
+						return true;
+				}
+				return false;
 			}
-			return false;
+			return true;
 		}
 
 		CE double FeedHandler::maxPrice()

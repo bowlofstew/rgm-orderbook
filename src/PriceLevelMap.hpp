@@ -21,9 +21,10 @@ namespace RgmInterview {
 			uint32_t total_volume;
 			typedef typename std::map < uint32_t, OrderList_ptr, T > LevelsTree;
 
-			PriceLevelMap() : total_volume ( 0 ),
+			PriceLevelMap ( uint32_t target_volume ) : total_volume ( 0 ),
 				m_cached_total_value ( std::numeric_limits<uint32_t>::max() ),
-				m_last_considered_level ( std::numeric_limits<uint32_t>::max() )
+				m_last_considered_level ( std::numeric_limits<uint32_t>::max() ),
+				m_target_volume ( target_volume )
 			{
 			}
 
@@ -85,8 +86,9 @@ namespace RgmInterview {
 				}
 			}
 
-			uint32_t get_total_value ( uint32_t target_volume )
+			uint32_t get_total_value ( )
 			{
+				uint32_t target_volume ( m_target_volume );
 				uint32_t total_value ( std::numeric_limits<uint32_t>::max() );
 				if ( total_volume >= target_volume )
 				{
@@ -145,6 +147,7 @@ namespace RgmInterview {
 			LevelsTable m_table;
 			uint32_t m_cached_total_value;
 			uint32_t m_last_considered_level;
+			uint32_t m_target_volume;
 
 			/* Remove ( O(1) ) the price level from the map */
 			void remove ( uint32_t price )

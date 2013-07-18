@@ -21,7 +21,7 @@ namespace RgmInterview {
 			OrderList();
 			~OrderList();
 			OrderNode_list::iterator add ( Order_ptr const & order );
-			void remove ( OrderNode_list::iterator order_iter );
+			void remove ( OrderNode_list::iterator const & order_iter );
 			bool empty() const;
 			size_t size() const;
 			OrderNode_list::iterator begin();

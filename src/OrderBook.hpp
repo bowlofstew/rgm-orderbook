@@ -33,7 +33,6 @@ namespace RgmInterview {
 						  std::string const & time,
 						  std::ostream &os ) ;
 
-
 			BuyPriceLevelMap const & buys() const
 			{
 				return m_buys;
@@ -69,10 +68,10 @@ namespace RgmInterview {
 										   Order_ptr const & order );
 
 			template <class T>
-			void reduce ( T & map,
-						  std::string const & order_id,
-						  OrderNode_list::iterator & order,
-						  uint32_t volume );
+			inline void reduce ( T & map,
+								 std::string const & order_id,
+								 OrderNode_list::iterator & order,
+								 uint32_t volume );
 
 			template <class T>
 			void check ( T & map,
@@ -82,7 +81,6 @@ namespace RgmInterview {
 		};
 
 		typedef OrderBook * OrderBook_ptr;
-
 	}
 }
 

@@ -13,8 +13,8 @@ namespace RgmInterview {
 
 		OrderList::~OrderList()
 		{
-			for ( OrderNode_list::iterator iter = m_list.begin();
-					iter != m_list.end();
+			for ( OrderNode_list::iterator iter = begin();
+					iter != end();
 					iter++ )
 				delete ( ( *iter ) );
 			total_volume = 0;
@@ -47,9 +47,8 @@ namespace RgmInterview {
 			return --last;
 		}
 
-		void OrderList::remove ( OrderNode_list::iterator order_iter )
+		void OrderList::remove ( OrderNode_list::iterator const & order_iter )
 		{
-			OrderNode_list::iterator c_iter ( m_list.begin() );
 			m_list.erase ( order_iter );
 		}
 	}
