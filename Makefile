@@ -1,6 +1,8 @@
 RELEASE_FLAGS = "-O3 -Wall -DNDEBUG"
 DEBUG_FLAGS = "-O0 -g -Wall -Werror"
 RELEASE_PROFILE_FLAGS = "-O3 -Wall -DNDEBUG -DPROFILE -lprofiler"
+RELEASE_PGO_FLAGS_GEN = "-O3 -Wall -DNDEBUG -fprofile-generate"
+RELEASE_PGO_FLAGS_USE = "-O3 -Wall -DNDEBUG -fprofile-use"
 
 all: clean debug release pricer-smoketests
 
@@ -24,6 +26,16 @@ lib/$(VERSION)/OrderList.o : src/OrderList.cpp
 
 lib/$(VERSION)/Tests.o : src/Tests.cpp
 	g++ -std=c++11 -c $< -pipe $(FLAGS) -o $@
+
+release-pgo: pricer.in
+	mkdir lib;mkdir lib/release;/bin/true
+	VERSION=release FLAGS=$(RELEASE_PGO_FLAGS_GEN) LINK_FLAGS="-fprofile-generate -lgcov" make pricer
+	time cat pricer.in | ./pricer 200 >/dev/null; /bin/true
+	rm pricer
+	rm lib/*/*.o
+	VERSION=release FLAGS=$(RELEASE_PGO_FLAGS_USE) LINK_FLAGS="-fprofile-use" make pricer
+	strip pricer
+	time cat pricer.in | ./pricer 200 >/dev/null
 
 release:
 	mkdir lib;mkdir lib/release;/bin/true
@@ -71,7 +83,7 @@ pricer.out.10000:
 	wget http://www.rgmadvisors.com/problems/orderbook/pricer.out.10000.gz  -O - | gunzip > pricer.out.10000
 	
 pricer: lib/$(VERSION)/ErrorSummary.o lib/$(VERSION)/FeedHandler.o lib/$(VERSION)/Main.o lib/$(VERSION)/Order.o lib/$(VERSION)/OrderBook.o lib/$(VERSION)/OrderList.o
-	g++ $^ -o pricer -pipe
+	g++ $(LINK_FLAGS) $^ -o pricer -pipe
 	
 pricer-valgrind: pricer pricer.in
 	head -n1000 pricer.in | valgrind --error-exitcode=1 ./pricer 200; /bin/true
@@ -86,7 +98,7 @@ pricer-smoketests: pricer.in pricer.out.1 pricer.out.200 pricer.out.10000
 	diff -q pricer.out.10000 my.pricer.out.10000
 	
 clean:
-	rm -Rf lib tests main pricer lib/*/*.o orderbook_michiel_van_slobbe.tgz tests.prof src/*~ src/*.orig *pricer.out* *~ pricer.in *.tgz
+	rm -Rf lib tests main pricer lib/*/*.o orderbook_michiel_van_slobbe.tgz tests.prof src/*~ src/*.orig *pricer.out* *~ pricer.in
 	
 package: clean style debug release
 	find . -name "*~" -exec rm {} \;
