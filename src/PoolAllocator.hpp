@@ -25,6 +25,8 @@ namespace RgmInterview {
 			/* The pool allocator cuts down on the number of mallocs we have to do. On the flip-side, it is less memory efficient.  */
 			PoolAllocator<T> ( )
 			{
+				for ( size_t i = 0 ; i < 200; i++ )
+					m_stack.push ( &tArr[i] );
 			}
 
 			static PoolAllocator<T> & instance()
@@ -39,7 +41,8 @@ namespace RgmInterview {
 				{
 					T* top = m_stack.top();
 					assert ( top );
-					std::allocator<T>::deallocate ( top, sizeof ( T ) );
+					if ( top < tArr || top >= tArr + 200 * sizeof ( T ) )
+						std::allocator<T>::deallocate ( top, sizeof ( T ) );
 					m_stack.pop();
 				}
 			}
@@ -59,13 +62,14 @@ namespace RgmInterview {
 				assert ( t );
 				if ( m_stack.size() < max_size )
 					m_stack.push ( t );
-				else
+				else if ( t < tArr || t >= tArr + 200 * sizeof ( T ) )
 					std::allocator<T>::deallocate ( t, n );
 			}
 
 		private:
 			std::stack<T*> m_stack;
 			PoolAllocator<T> ( PoolAllocator<T> const & rhs ) {}
+			T tArr[200];
 		};
 	}
 }

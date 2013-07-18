@@ -28,6 +28,7 @@ namespace RgmInterview {
 		{
 		public:
 			friend class OrderList;
+			Order();
 			Order (
 				OrderSide::Side side,
 				uint32_t volume,

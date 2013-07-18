@@ -15,6 +15,11 @@ namespace RgmInterview {
 		 *
 		 * We obviously have to pick Constants::round_size properly.
 		 */
+		Order::Order () : m_volume ( 0 ),
+			m_price ( 0 )
+		{
+		}
+
 		Order::Order (
 			OrderSide::Side side,
 			uint32_t volume,
