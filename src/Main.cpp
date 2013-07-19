@@ -1,4 +1,6 @@
+#include <stdio.h>
 #include <fstream>
+#include <cstring>
 #include <string>
 #include <iomanip>
 #include <iostream>
@@ -11,7 +13,7 @@ int main ( int argc, char **argv )
 {
 	try
 	{
-		std::string line;
+		char foo[250];
 		std::cout.precision ( 8 );
 		if ( argc < 2 )
 		{
@@ -20,7 +22,10 @@ int main ( int argc, char **argv )
 		}
 		const std::string sz ( argv[1] );
 		FeedHandler feed ( atoi ( sz.c_str() ) );
-		while ( std::getline ( std::cin, line ) ) {
+		while ( fgets(foo,250,stdin) )
+		{
+			foo [ strlen(foo) -1 ] = '\0';
+			std::string line ( foo );
 			feed.processMessage ( line, std::cout );
 		}
 		if ( !feed.errors().empty() )
