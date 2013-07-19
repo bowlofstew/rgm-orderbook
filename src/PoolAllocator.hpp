@@ -8,16 +8,6 @@
 namespace RgmInterview {
 	namespace OrderBook {
 
-		/*
-		 * We expect the number of objects to stay relatively stable once we're in business. If that's not the case,
-		 * it makes more sense to allocate memory in chunks. For instance by creating a T* chunk = new T[25] and filling
-		 * the stack with those whenever it's empty. There are two downsides to this:
-		 *
-		 * 1. The T objects need to have a default () constructor that's accessible by the PoolAllocator.
-		 * 2. Slightly more memory overhead because every time we allocate 25, we've got 24 waiting there to be taken up.
-		 *
-		 * I decided not to do this, but if the situation calls for it, that would definitely be possible.
-		 */
 		template <class T>
 		class PoolAllocator : public std::allocator<T>
 		{
